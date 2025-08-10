@@ -1,0 +1,768 @@
+// Design Tokens - Tối ưu hóa cho accessibility (contrast ratio > 4.5:1), modern aesthetics với soft shadows và subtle animations
+:root {
+  // Colors - Palette hiện đại, dễ đọc, hỗ trợ dark mode seamless
+  --color-primary: #3b82f6; // Blue chính, vibrant nhưng không chói
+  --color-primary-light: #60a5fa;
+  --color-primary-dark: #1d4ed8;
+  --color-secondary: #eab308; // Yellow accent cho badge
+  --color-accent: #22c55e; // Green cho gradient, success
+  --color-text: #0f172a; // Dark text cho light mode
+  --color-text-light: #475569; // Subtext
+  --color-bg: #f9fafb; // Background nhẹ
+  --color-bg-alt: #f3f4f6; // Alternate bg cho sections
+  --color-card: #ffffff; // Card bg
+  --color-border: #d1d5db; // Borders subtle
+  --color-footer-bg: #111827; // Footer dark
+  --color-footer-text: #9ca3af;
+  --color-footer-link: #d1d5db;
+  --color-footer-border: rgba(255, 255, 255, 0.05);
+  
+  // Shadows - Soft, layered cho depth mà không nặng nề
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 12px 24px rgba(0, 0, 0, 0.15);
+  
+  // Spacing - Scale linh hoạt, dựa trên rem cho scalability
+  --space-xxs: 0.25rem;
+  --space-xs: 0.5rem;
+  --space-sm: 0.75rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-xxl: 3rem;
+  --space-xxxl: 4rem;
+  
+  // Typography - Font sizes responsive, weights cho hierarchy rõ ràng
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.25rem;
+  --text-2xl: 1.5rem;
+  --text-3xl: 1.875rem;
+  --text-4xl: 2.25rem;
+  --text-5xl: 3rem;
+  --font-weight-light: 300;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  
+  // Borders - Rounded corners hiện đại, consistent
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-full: 9999px;
+  
+  // Transitions - Smooth animations, không lag trên mobile
+  --transition-fast: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 500ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+body.dark-mode {
+  --color-primary: #60a5fa;
+  --color-primary-light: #93c5fd;
+  --color-primary-dark: #3b82f6;
+  --color-secondary: #fbbf24;
+  --color-accent: #4ade80;
+  --color-text: #f3f4f6;
+  --color-text-light: #9ca3af;
+  --color-bg: #030712;
+  --color-bg-alt: #111827;
+  --color-card: #1f2937;
+  --color-border: #374151;
+  --color-footer-bg: #030712;
+  --color-footer-text: #9ca3af;
+  --color-footer-link: #d1d5db;
+  --color-footer-border: rgba(255, 255, 255, 0.1);
+}
+
+// Base Styles - Tối ưu performance (no reflow), accessibility (focus states, aria), user-friendly (touch-friendly)
+.home-root {
+  min-height: 100vh;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  line-height: 1.6;
+  display: flex;
+  flex-direction: column;
+  transition: background-color var(--transition-normal), color var(--transition-normal);
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overscroll-behavior: none; // Ngăn scroll bounce không cần thiết
+}
+
+// Header - Sticky với shrink effect khi scroll, touch-friendly button
+.home-header {
+  background-color: var(--color-card);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  transition: box-shadow var(--transition-normal), padding var(--transition-normal), background-color var(--transition-normal);
+  padding: var(--space-md) 0;
+
+  &.scrolled {
+    box-shadow: var(--shadow-md);
+    padding: var(--space-sm) 0; // Shrink nhẹ khi scroll
+  }
+  
+  .header-container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 var(--space-lg);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .home-logo {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    font-weight: var(--font-weight-bold);
+    font-size: var(--text-xl);
+    text-decoration: none;
+    color: var(--color-text);
+    transition: opacity var(--transition-fast);
+    
+    &:hover {
+      opacity: 0.9;
+    }
+    
+    .logo-icon {
+      color: var(--color-primary);
+      font-size: 1.2em;
+    }
+    
+    .logo-text {
+      background: linear-gradient(135deg, var(--color-primary) 20%, var(--color-accent) 80%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+  }
+  
+  .dark-mode-toggle {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--color-text-light);
+    font-size: var(--text-xl);
+    transition: color var(--transition-fast), transform var(--transition-fast);
+    padding: var(--space-xxs) var(--space-xs);
+    border-radius: var(--radius-full);
+    min-width: 44px; // Touch target size > 44px cho mobile
+    
+    &:hover {
+      color: var(--color-primary);
+      transform: rotate(15deg);
+    }
+    
+    &:focus {
+      outline: none;
+      box-shadow: 0 0 0 2px var(--color-primary);
+    }
+  }
+}
+
+// Hero - Centered, với fade-in animation, text responsive, thêm subtle parallax cho background gradient để tăng depth
+.home-hero {
+  padding: var(--space-xxxl) var(--space-lg) var(--space-xxl);
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.05) 0%, rgba(34, 197, 94, 0.05) 100%);
+  text-align: center;
+  animation: fadeIn var(--transition-slow) ease-out;
+  position: relative;
+  overflow: hidden;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.02) 0%, rgba(34, 197, 94, 0.02) 100%);
+    transform: translateY(0);
+    transition: transform var(--transition-slow);
+  }
+  
+  &:hover::before {
+    transform: translateY(-5%);
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  .hero-content {
+    max-width: 720px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+  
+  h1 {
+    font-size: var(--text-5xl);
+    font-weight: var(--font-weight-bold);
+    line-height: 1.1;
+    margin-bottom: var(--space-md);
+    
+    .primary-gradient {
+      background: linear-gradient(135deg, var(--color-primary) 20%, var(--color-accent) 80%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+  }
+  
+  .hero-subtitle {
+    font-size: var(--text-xl);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-light);
+    margin-bottom: var(--space-lg);
+  }
+  
+  .hero-description {
+    font-size: var(--text-lg);
+    color: var(--color-text-light);
+    margin-bottom: var(--space-xl);
+    line-height: 1.7;
+  }
+}
+
+// Button - Gradient, icon animation, large touch target, thêm ripple effect cho interactivity cao hơn
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  background: linear-gradient(135deg, var(--color-primary) 20%, var(--color-primary-light) 80%);
+  color: white;
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--text-lg);
+  padding: var(--space-sm) var(--space-xl);
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+  box-shadow: var(--shadow-sm);
+  min-height: 48px; // Touch target cho mobile
+  position: relative;
+  overflow: hidden;
+  
+  &::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: width var(--transition-fast), height var(--transition-fast);
+  }
+  
+  &:active::after {
+    width: 200%;
+    height: 200%;
+  }
+  
+  svg:last-child {
+    transition: transform var(--transition-fast);
+  }
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+    
+    svg:last-child {
+      transform: translateX(4px);
+    }
+  }
+  
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+  }
+}
+
+// Platforms - Infinite carousel với snap, smooth scroll, accessibility (keyboard navigable)
+.home-platforms {
+  padding: var(--space-xxl) 0;
+  
+  .section-container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 var(--space-lg);
+  }
+  
+  h2 {
+    text-align: center;
+    font-size: var(--text-3xl);
+    font-weight: var(--font-weight-bold);
+    margin-bottom: var(--space-xl);
+  }
+  
+  .platform-container.infinite-carousel {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    gap: var(--space-lg);
+    padding-bottom: var(--space-md);
+    scrollbar-width: none; // Ẩn scrollbar cho clean look
+    -ms-overflow-style: none;
+    &::-webkit-scrollbar { display: none; }
+    
+    // Initial scroll to middle for loop
+    scroll-behavior: smooth;
+  }
+  
+  .platform-card {
+    flex: 0 0 auto;
+    width: 300px;
+    min-width: 280px;
+    scroll-snap-align: center;
+    background: var(--color-card);
+    border-radius: var(--radius-lg);
+    padding: var(--space-lg);
+    box-shadow: var(--shadow-sm);
+    transition: transform var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast);
+    border: 1px solid var(--color-border);
+    text-decoration: none;
+    color: var(--color-text);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    position: relative;
+    
+    &:hover {
+      transform: scale(1.03);
+      box-shadow: var(--shadow-md);
+      border-color: var(--color-primary);
+    }
+    
+    &:focus {
+      outline: none;
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+    }
+    
+    .platform-icon {
+      font-size: 3.5rem;
+      margin-bottom: var(--space-md);
+      transition: transform var(--transition-fast);
+    }
+    
+    &:hover .platform-icon {
+      transform: scale(1.1) rotate(5deg);
+    }
+    
+    .platform-info {
+      h3 {
+        font-size: var(--text-xl);
+        font-weight: var(--font-weight-bold);
+        margin-bottom: var(--space-xxs);
+      }
+      
+      p {
+        font-size: var(--text-sm);
+        color: var(--color-text-light);
+        line-height: 1.5;
+      }
+    }
+    
+    &.coming-soon {
+      opacity: 0.75;
+      cursor: not-allowed;
+      
+      &:hover {
+        transform: none;
+        box-shadow: var(--shadow-sm);
+        border-color: var(--color-border);
+      }
+    }
+  }
+  
+  .platform-badge {
+    position: absolute;
+    top: var(--space-sm);
+    right: var(--space-sm);
+    background: var(--color-secondary);
+    color: var(--color-bg);
+    font-size: var(--text-xs);
+    font-weight: var(--font-weight-medium);
+    padding: var(--space-xxs) var(--space-sm);
+    border-radius: var(--radius-full);
+    box-shadow: var(--shadow-sm);
+    transition: transform var(--transition-fast);
+    
+    .coming-soon:hover & {
+      transform: scale(1.1);
+    }
+  }
+}
+
+// Features - Grid layout với hover lift effect, icons animated
+.home-features {
+  padding: var(--space-xxl) 0;
+  background-color: var(--color-bg-alt);
+  
+  .section-container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 var(--space-lg);
+  }
+  
+  h2 {
+    text-align: center;
+    font-size: var(--text-3xl);
+    font-weight: var(--font-weight-bold);
+    margin-bottom: var(--space-xl);
+  }
+  
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--space-lg);
+  }
+  
+  .feature-card {
+    background: var(--color-card);
+    border-radius: var(--radius-lg);
+    padding: var(--space-lg);
+    box-shadow: var(--shadow-sm);
+    transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+    text-align: center;
+    
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-lg);
+    }
+    
+    .feature-icon {
+      font-size: 2.5rem;
+      margin-bottom: var(--space-md);
+      transition: transform var(--transition-fast);
+    }
+    
+    &:hover .feature-icon {
+      transform: rotate(10deg) scale(1.1);
+    }
+    
+    h3 {
+      font-size: var(--text-xl);
+      font-weight: var(--font-weight-bold);
+      margin-bottom: var(--space-sm);
+    }
+    
+    p {
+      font-size: var(--text-sm);
+      color: var(--color-text-light);
+    }
+  }
+}
+
+// Footer - Clean, với hover effects trên links, thêm social icons nếu cần
+.home-footer {
+  background-color: var(--color-footer-bg);
+  color: var(--color-footer-text);
+  padding: var(--space-xl) 0;
+  margin-top: auto;
+  
+  .footer-container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 var(--space-lg);
+  }
+  
+  .footer-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--space-md);
+    border-bottom: 1px solid var(--color-footer-border);
+    padding-bottom: var(--space-lg);
+    margin-bottom: var(--space-lg);
+  }
+  
+  .footer-nav {
+    display: flex;
+    gap: var(--space-lg);
+    
+    a {
+      color: var(--color-footer-link);
+      text-decoration: none;
+      font-size: var(--text-sm);
+      transition: color var(--transition-fast), transform var(--transition-fast);
+      
+      &:hover {
+        color: var(--color-primary);
+        transform: translateY(-2px);
+      }
+      
+      &:focus {
+        outline: none;
+        box-shadow: 0 0 0 2px var(--color-primary);
+      }
+    }
+  }
+  
+  .footer-bottom {
+    text-align: center;
+    font-size: var(--text-xs);
+  }
+}
+
+// Toast - Animation slide-up, accessible với role=alert, thêm dismiss button cho UX tốt hơn
+.toast-coming-soon {
+  position: fixed;
+  bottom: var(--space-xl);
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--color-card);
+  color: var(--color-text);
+  padding: var(--space-sm) var(--space-lg);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  font-size: var(--text-sm);
+  z-index: 1000;
+  max-width: 80%;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  animation: slideUp var(--transition-normal) ease-out forwards, fadeOut var(--transition-normal) ease-in 2.7s forwards;
+  
+  button {
+    background: none;
+    border: none;
+    color: var(--color-text-light);
+    cursor: pointer;
+    font-size: var(--text-base);
+    transition: color var(--transition-fast);
+    
+    &:hover {
+      color: var(--color-primary);
+    }
+  }
+  
+  @keyframes slideUp {
+    from { opacity: 0; transform: translate(-50%, 20px); }
+    to { opacity: 1; transform: translate(-50%, 0); }
+  }
+  
+  @keyframes fadeOut {
+    to { opacity: 0; transform: translate(-50%, -20px); }
+  }
+}
+
+// Responsive Design - Mobile-first, đầy đủ cho PC (>1280px), Laptop (1024-1280px), iPad (768-1024px landscape/portrait), Mobile (<768px)
+@media (min-width: 1281px) {
+  // PC large: Grid for platforms
+  .platform-container.infinite-carousel {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    overflow-x: hidden;
+    scroll-snap-type: none;
+    gap: var(--space-lg);
+  }
+  
+  .platform-card {
+    width: auto;
+    scroll-snap-align: none;
+  }
+}
+
+@media (max-width: 1280px) {
+  .header-container, .section-container, .footer-container {
+    padding: 0 var(--space-md);
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  // iPad landscape/Laptop small
+  .home-hero {
+    padding: var(--space-xxl) var(--space-md);
+    
+    h1 {
+      font-size: var(--text-4xl);
+    }
+  }
+  
+  .platform-container.infinite-carousel {
+    gap: var(--space-md);
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    overflow-x: hidden;
+    scroll-snap-type: none;
+  }
+  
+  .platform-card {
+    width: auto;
+    min-width: auto;
+    scroll-snap-align: none;
+  }
+  
+  .features-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  // iPad portrait/Mobile large
+  .home-header .header-container {
+    padding: 0 var(--space-md);
+  }
+  
+  .home-hero {
+    padding: var(--space-xl) var(--space-sm);
+    
+    h1 {
+      font-size: var(--text-3xl);
+    }
+    
+    .hero-subtitle {
+      font-size: var(--text-lg);
+    }
+    
+    .hero-description {
+      font-size: var(--text-base);
+    }
+  }
+  
+  .home-platforms, .home-features {
+    padding: var(--space-xl) 0;
+    
+    .section-container {
+      padding: 0 var(--space-md);
+    }
+    
+    h2 {
+      font-size: var(--text-2xl);
+    }
+  }
+  
+  .platform-container.infinite-carousel {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    gap: var(--space-sm);
+    padding: 0 var(--space-sm) var(--space-md);
+  }
+  
+  .platform-card {
+    width: 250px;
+    min-width: 80vw;
+    scroll-snap-align: start;
+  }
+  
+  .features-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .btn-primary {
+    width: 50%;
+    justify-content: center;
+    font-size: var(--text-base);
+  }
+  
+  .footer-top {
+    flex-direction: column;
+    text-align: center;
+    gap: var(--space-lg);
+  }
+  
+  .footer-nav {
+    flex-direction: column;
+    gap: var(--space-md);
+  }
+}
+
+@media (max-width: 480px) {
+  // Mobile small
+  .home-logo {
+    font-size: var(--text-lg);
+    
+    .logo-icon {
+      font-size: 1.1em;
+    }
+  }
+  
+  .home-hero {
+    padding: var(--space-lg) var(--space-xs);
+    
+    h1 {
+      font-size: var(--text-2xl);
+    }
+    
+    .hero-subtitle {
+      font-size: var(--text-base);
+    }
+    
+    .hero-description {
+      font-size: var(--text-sm);
+    }
+  }
+  
+  .platform-container.infinite-carousel {
+    gap: var(--space-sm);
+  }
+  
+  .platform-card {
+    width: 220px;
+    min-width: 90vw;
+    padding: var(--space-md);
+  }
+  
+  .toast-coming-soon {
+    bottom: var(--space-lg);
+    padding: var(--space-xs) var(--space-md);
+    font-size: var(--text-xs);
+    max-width: 95%;
+  }
+  
+  .footer-nav {
+    gap: var(--space-sm);
+  }
+}
+
+@media (orientation: portrait) and (min-width: 768px) and (max-width: 1024px) {
+  // iPad portrait specific
+  .platform-container.infinite-carousel {
+    grid-template-columns: repeat(2, 1fr);
+    display: grid;
+    overflow-x: hidden;
+  }
+  
+  .platform-card {
+    min-width: auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .home-features {
+    padding: var(--space-xl) 0; /* Đã có, giữ nguyên */
+  }
+  
+  .features-grid {
+    grid-template-columns: 1fr; /* Đã có, giữ nguyên */
+    gap: var(--space-lg); /* Tăng từ mặc định lên 1.5rem để thoáng hơn */
+  }
+  
+  .feature-card {
+    padding: var(--space-lg); /* Tăng padding từ 1rem lên 1.5rem */
+  }
+  
+  .feature-card h3 {
+    font-size: var(--text-2xl); /* Tăng từ 1.25rem lên 1.5rem */
+  }
+  
+  .feature-card p {
+    font-size: var(--text-base); /* Tăng từ 0.875rem lên 1rem */
+    line-height: 1.6; /* Cải thiện khả năng đọc */
+  }
+}

@@ -1,0 +1,541 @@
+// Modern Design Tokens
+$colors: (
+  primary: #dd2a7b,  // Instagram pink
+  primary-dark: #c13584,
+  instagram-gradient-start: #f58529,
+  instagram-gradient-mid: #dd2a7b,
+  instagram-gradient-end: #515bd4,
+  success: #00a884,
+  success-light: #36cfac,
+  error: #f02849,
+  bg-light: #fafafa,
+  bg-dark: #262626,
+  card-light: #ffffff,
+  card-dark: #121212,
+  text-light: #262626,
+  text-dark: #ffffff,
+  text-light-secondary: #8e8e8e,
+  text-dark-secondary: #b3b3b3,
+  border-light: #dbdbdb,
+  border-dark: #363636,
+  shadow-light: rgba(0, 0, 0, 0.1),
+  shadow-dark: rgba(0, 0, 0, 0.25),
+  input-bg-light: #ffffff,
+  input-bg-dark: #121212,
+  input-placeholder-light: #8e8e8e,
+  input-placeholder-dark: #b3b3b3,
+  input-error-bg-light: #fff1f2,
+  input-error-bg-dark: #3a1c1e,
+  input-error-border-light: rgba(240, 40, 73, 0.4),
+  input-error-border-dark: rgba(240, 40, 73, 0.3),
+  alert-success-bg-light: #e7f3ff,
+  alert-success-bg-dark: #1a2b3c,
+  alert-success-text-light: #1877f2,
+  alert-success-text-dark: #8ab4f8,
+  alert-error-bg-light: #ffebee,
+  alert-error-bg-dark: #442726,
+  alert-error-text-light: #b71c1c,
+  alert-error-text-dark: #ef9a9a,
+);
+
+$spaces: (
+  xs: 0.25rem,
+  sm: 0.5rem,
+  md: 1rem,
+  lg: 1.5rem,
+  xl: 2rem,
+  xxl: 3rem,
+  3xl: 4rem,
+);
+
+$fonts: (
+  sm: 0.875rem,
+  base: 1rem,
+  lg: 1.125rem,
+  xl: 1.25rem,
+  2xl: 1.5rem,
+  3xl: 2rem,
+);
+
+$radii: (
+  sm: 0.375rem,
+  md: 0.5rem,
+  lg: 0.75rem,
+  xl: 1rem,
+  xxl: 1.5rem,
+  full: 9999px,
+);
+
+$shadows: (
+  sm: 0 2px 4px rgba(0, 0, 0, 0.06),
+  md: 0 4px 12px rgba(0, 0, 0, 0.08),
+  lg: 0 8px 24px rgba(0, 0, 0, 0.1),
+);
+
+// Theme Variables
+:root {
+  --color-bg: map-get($colors, bg-light);
+  --color-card: map-get($colors, card-light);
+  --color-text: map-get($colors, text-light);
+  --color-text-light: map-get($colors, text-light-secondary);
+  --color-border: map-get($colors, border-light);
+  --color-shadow: map-get($colors, shadow-light);
+  --color-input-bg: map-get($colors, input-bg-light);
+  --color-input-placeholder: map-get($colors, input-placeholder-light);
+  --color-input-error-bg: map-get($colors, input-error-bg-light);
+  --color-input-error-border: map-get($colors, input-error-border-light);
+  --color-alert-success-bg: map-get($colors, alert-success-bg-light);
+  --color-alert-success-text: map-get($colors, alert-success-text-light);
+  --color-alert-error-bg: map-get($colors, alert-error-bg-light);
+  --color-alert-error-text: map-get($colors, alert-error-text-light);
+
+  @each $name, $value in $colors {
+    --color-#{$name}: #{$value};
+  }
+  @each $name, $value in $spaces {
+    --space-#{$name}: #{$value};
+  }
+  @each $name, $value in $fonts {
+    --text-#{$name}: #{$value};
+  }
+  @each $name, $value in $radii {
+    --radius-#{$name}: #{$value};
+  }
+  @each $name, $value in $shadows {
+    --shadow-#{$name}: #{$value};
+  }
+  --transition-fast: 200ms ease-out;
+  --transition-normal: 300ms ease-out;
+}
+
+.dark-mode {
+  --color-bg: map-get($colors, bg-dark);
+  --color-card: map-get($colors, card-dark);
+  --color-text: map-get($colors, text-dark);
+  --color-text-light: map-get($colors, text-dark-secondary);
+  --color-border: map-get($colors, border-dark);
+  --color-shadow: map-get($colors, shadow-dark);
+  --color-input-bg: map-get($colors, input-bg-dark);
+  --color-input-placeholder: map-get($colors, input-placeholder-dark);
+  --color-input-error-bg: map-get($colors, input-error-bg-dark);
+  --color-input-error-border: map-get($colors, input-error-border-dark);
+  --color-alert-success-bg: map-get($colors, alert-success-bg-dark);
+  --color-alert-success-text: map-get($colors, alert-success-text-dark);
+  --color-alert-error-bg: map-get($colors, alert-error-bg-dark);
+  --color-alert-error-text: map-get($colors, alert-error-text-dark);
+}
+
+// Mixins
+@mixin button-base {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  padding: var(--space-md) var(--space-lg);
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: var(--text-base);
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast), filter var(--transition-fast);
+  box-shadow: var(--shadow-sm);
+
+  &:not(:disabled):hover {
+    transform: scale(1.02);
+    box-shadow: var(--shadow-md);
+    filter: brightness(0.95);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+// Base Styles
+body {
+  background: var(--color-bg);
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  margin: 0;
+  min-height: 100vh;
+  color: var(--color-text);
+  transition: background-color var(--transition-normal), color var(--transition-normal);
+  scroll-behavior: smooth;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+// Component Styles
+.main-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: var(--space-xl);
+  background: var(--color-bg);
+}
+
+.insta-downloader-root {
+  max-width: 800px;
+  width: 100%;
+  margin: 0 auto;
+  padding: var(--space-xxl) var(--space-xl);
+  background: var(--color-card);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-lg);
+  text-align: center;
+  border: 1px solid var(--color-border);
+  transition: all var(--transition-normal);
+
+  @media (max-width: 1024px) {
+    padding: var(--space-xl) var(--space-lg);
+  }
+
+  @media (max-width: 768px) {
+    padding: var(--space-lg) var(--space-md);
+    border-radius: var(--radius-lg);
+  }
+
+  @media (max-width: 480px) {
+    min-width: auto;
+  }
+}
+
+.header-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: var(--space-xl);
+
+  @media (max-width: 480px) {
+    flex-direction: column;
+    gap: var(--space-md);
+  }
+}
+
+.insta-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+
+.insta-logo {
+  width: 3rem;
+  height: 3rem;
+  filter: drop-shadow(0 2px 4px rgba(246, 7, 114, 0.2));
+  color: #dd2a7b;
+}
+  .insta-title {
+    color: var(--color-text);
+    font-weight: 700;
+    font-size: clamp(var(--text-xl), 5vw, var(--text-3xl));
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+
+    .hide-on-pc {
+      display: none;
+
+      @media (max-width: 480px) {
+        display: inline;
+      }
+    }
+  }
+}
+
+.insta-input-group {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: var(--space-sm);
+  align-items: center;
+  background: transparent;
+  margin-bottom: var(--space-xl);
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+
+  .insta-input {
+    padding: var(--space-md) var(--space-lg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    font-size: var(--text-lg);
+    background: var(--color-input-bg);
+    outline: none;
+    box-shadow: var(--shadow-sm);
+    transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+
+    &::placeholder {
+      color: var(--color-input-placeholder);
+      opacity: 0.8;
+    }
+
+    &:focus {
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 3px rgba(221, 42, 123, 0.2);
+    }
+
+    &.insta-input-error {
+      border-color: var(--color-error);
+      background: var(--color-input-error-bg);
+      box-shadow: 0 0 0 3px var(--color-input-error-border);
+    }
+  }
+}
+
+.insta-btn {
+  @include button-base;
+  white-space: nowrap;
+
+  &.insta-btn-preview {
+    background: linear-gradient(135deg, var(--color-instagram-gradient-start), var(--color-instagram-gradient-mid), var(--color-instagram-gradient-end));
+    color: #fff;
+  }
+
+  &.insta-btn-download {
+    background: linear-gradient(135deg, map-get($colors, success) 0%, map-get($colors, success-light) 100%);
+    color: #fff;
+  }
+
+  &.insta-btn-copy {
+    background: transparent;
+    color: var(--color-primary);
+    border: 1px solid var(--color-primary);
+    box-shadow: none;
+
+    &:hover:not(:disabled) {
+      background: rgba(221, 42, 123, 0.1);
+      box-shadow: var(--shadow-sm);
+    }
+  }
+
+  &.insta-btn-back {
+    background: transparent;
+    color: var(--color-text-light);
+    border: 1px solid var(--color-border);
+    font-weight: 500;
+    box-shadow: none;
+
+    &:hover:not(:disabled) {
+      background: rgba(0, 0, 0, 0.05);
+      box-shadow: var(--shadow-sm);
+    }
+  }
+}
+
+.insta-preview-row {
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+  gap: var(--space-lg);
+  background: var(--color-card);
+  border-radius: var(--radius-lg);
+  margin: var(--space-lg) 0;
+  padding: var(--space-lg);
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--color-border);
+
+  @media (max-width: 1024px) {
+    gap: var(--space-md);
+  }
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    padding: var(--space-md);
+  }
+
+  .insta-preview-col {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+
+    &.insta-preview-video {
+      width: 100%;
+
+      .insta-video-title {
+        font-size: var(--text-xl);
+        font-weight: 600;
+        color: var(--color-text);
+        margin-bottom: var(--space-md);
+        text-align: left;
+        line-height: 1.3;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+      }
+
+      .insta-video-preview {
+        width: 100%;
+        aspect-ratio: 9 / 16;  // Instagram reel aspect
+        max-height: unset;
+        border-radius: var(--radius-md);
+        background: #000;
+        box-shadow: var(--shadow-lg);
+        transition: transform var(--transition-normal);
+
+        &:hover {
+          transform: scale(1.01);
+        }
+
+        @media (max-width: 768px) {
+          aspect-ratio: 9 / 16;
+        }
+      }
+    }
+
+    &.insta-preview-actions {
+      gap: var(--space-md);
+
+      @media (max-width: 768px) {
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        display: grid;
+      }
+    }
+  }
+}
+
+.insta-progress-wrap {
+  margin: var(--space-md) 0;
+  padding: var(--space-sm);
+  background: var(--color-card);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+
+  .insta-progress-bar-bg {
+    height: 8px;
+    background: var(--color-border);
+    border-radius: var(--radius-full);
+    overflow: hidden;
+
+    .insta-progress-bar {
+      background: linear-gradient(90deg, var(--color-primary) 0%, var(--color-success) 100%);
+      height: 100%;
+      transition: width 0.4s ease-out;
+    }
+  }
+
+  .insta-progress-label {
+    margin-top: var(--space-xs);
+    color: var(--color-text);
+    font-weight: 500;
+    font-size: var(--text-sm);
+    text-align: center;
+  }
+}
+
+.insta-alert {
+  margin: var(--space-md) 0;
+  padding: var(--space-md) var(--space-lg);
+  border-radius: var(--radius-md);
+  font-size: var(--text-base);
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  justify-content: center;
+  animation: fadeIn 0.3s ease-out;
+  box-shadow: var(--shadow-sm);
+
+  &.insta-alert-success {
+    background: var(--color-alert-success-bg);
+    color: var(--color-alert-success-text);
+  }
+
+  &.insta-alert-error {
+    background: var(--color-alert-error-bg);
+    color: var(--color-alert-error-text);
+  }
+}
+
+.insta-guide {
+  color: var(--color-text-light);
+  font-size: var(--text-sm);
+  line-height: 1.6;
+  margin-top: var(--space-xl);
+  padding: var(--space-md);
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius-md);
+  background: rgba(var(--color-bg), 0.5);
+}
+
+.insta-powered {
+  color: var(--color-text-light);
+  font-size: var(--text-sm);
+  margin-top: var(--space-xl);
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--color-border);
+  opacity: 0.8;
+}
+
+.insta-spin {
+  animation: insta-spin 1s linear infinite;
+
+  @keyframes insta-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+// Enhanced Responsive Design
+@media (max-width: 1024px) {
+  .insta-downloader-root {
+    max-width: 90vw;
+  }
+
+  .insta-header .insta-logo {
+    font-size: 2.5rem;
+  }
+
+  .insta-title {
+    font-size: var(--text-2xl);
+  }
+}
+
+@media (max-width: 768px) {
+  .main-center {
+    padding: var(--space-lg);
+  }
+
+  .insta-input-group {
+    gap: var(--space-md);
+  }
+
+  .insta-btn {
+    padding: var(--space-sm) var(--space-md);
+    font-size: var(--text-sm);
+  }
+
+  .insta-preview-row {
+    gap: var(--space-sm);
+  }
+}
+
+@media (max-width: 480px) {
+  .insta-header {
+    justify-content: center;
+    text-align: center;
+  }
+
+  .insta-guide {
+    font-size: var(--text-sm);
+    padding: var(--space-sm);
+  }
+}
