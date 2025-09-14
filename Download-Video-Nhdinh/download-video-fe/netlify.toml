@@ -1,0 +1,19 @@
+[build]
+  # Directory where the build command is run
+  base = "download-video-fe"
+  
+  # Directory that contains the built files to deploy
+  publish = "download-video-fe/build"
+  
+  # Build command
+  command = "npm run build"
+
+# Settings for SPAs (Single Page Applications)
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# Optional: Environment variables for production
+[build.environment]
+  NODE_VERSION = "18"
