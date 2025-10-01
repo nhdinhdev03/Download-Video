@@ -1,3 +1,4 @@
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   FaAt,
   FaFacebook,
@@ -9,15 +10,25 @@ import {
   FaYoutube,
 } from "react-icons/fa";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { useEffect, useState, useCallback, useMemo, useRef } from "react";
-import "./MainLayout.scss";
 import img from "../assets/img";
+import "./MainLayout.scss";
 
 function MainLayout({ children }) {
   const [toast, setToast] = useState("");
   const [toastProgress, setToastProgress] = useState(100);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(() => {
+    try {
+      const stored = localStorage.getItem("theme:darkMode");
+      if (stored !== null) return JSON.parse(stored);
+      return (
+        window.matchMedia &&
+        window.matchMedia("(prefers-color-scheme: dark)").matches
+      );
+    } catch {
+      return false;
+    }
+  });
   const [isScrolled, setIsScrolled] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
@@ -55,7 +66,7 @@ function MainLayout({ children }) {
       },
       {
         name: "X (Twitter)",
-        path: "/download/x(twitter)",
+        path: "/download/twitter",
         icon: <FaTwitter />,
         active: false,
         color: "#1da1f2",
@@ -86,6 +97,22 @@ function MainLayout({ children }) {
   );
 
   const toggleDarkMode = useCallback(() => setIsDarkMode((prev) => !prev), []);
+
+  // Đồng bộ dark-mode lên body và lưu vào localStorage
+  useEffect(() => {
+    try {
+      if (isDarkMode) document.body.classList.add("dark-mode");
+      else document.body.classList.remove("dark-mode");
+      localStorage.setItem("theme:darkMode", JSON.stringify(isDarkMode));
+    } catch {
+      // ignore storage errors
+    }
+  }, [isDarkMode]);
+
+  // Đóng mobile menu khi điều hướng route
+  useEffect(() => {
+    setIsMobileMenuOpen(false);
+  }, [location.pathname]);
 
   // Quản lý focus cho menu di động
   useEffect(() => {
@@ -141,7 +168,7 @@ function MainLayout({ children }) {
               onClick={toggleDarkMode}
               className="dark-mode-toggle"
               aria-label="Chuyển đổi chế độ sáng/tối"
-      
+              aria-pressed={isDarkMode}
             >
               {isDarkMode ? <FaSun /> : <FaMoon />}
             </button>
@@ -162,6 +189,9 @@ function MainLayout({ children }) {
                     }`}
                     style={{ "--platform-color": p.color }}
                     aria-label={`Tải xuống từ ${p.name}`}
+                    aria-current={
+                      location.pathname === p.path ? "page" : undefined
+                    }
                   >
                     <span className="platform-icon">{p.icon}</span>
                     <span className="platform-name">{p.name}</span>
@@ -173,7 +203,6 @@ function MainLayout({ children }) {
                     onClick={() => handleComingSoon(p.name)}
                     style={{ "--platform-color": p.color }}
                     aria-label={`${p.name} (Sắp ra mắt)`}
-    
                   >
                     <span className="platform-icon">{p.icon}</span>
                     <span className="platform-name">{p.name}</span>

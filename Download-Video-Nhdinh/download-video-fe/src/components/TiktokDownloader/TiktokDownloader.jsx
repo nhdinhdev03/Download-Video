@@ -1,14 +1,14 @@
-import { useState, useCallback, useEffect, useRef } from "react";
-import { useLocation } from "react-router-dom";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
-  FaTiktok,
+  FaArrowLeft,
+  FaCheckCircle,
   FaDownload,
   FaRegCopy,
-  FaCheckCircle,
-  FaTimesCircle,
   FaSpinner,
-  FaArrowLeft,
+  FaTiktok,
+  FaTimesCircle,
 } from "react-icons/fa";
+import { useLocation } from "react-router-dom";
 import "./TiktokDownloader.scss";
 
 const API_BASE =
@@ -348,7 +348,7 @@ const TiktokDownloader = () => {
 
         <br />
         {!thumbnail && (
-          <div className="fb-guide">
+          <div className="tiktok-guide">
             <b>Hướng dẫn:</b>{" "}
             {isMobile
               ? "Nhập link video TikTok vào ô trên, sau đó bấm Tải về."
