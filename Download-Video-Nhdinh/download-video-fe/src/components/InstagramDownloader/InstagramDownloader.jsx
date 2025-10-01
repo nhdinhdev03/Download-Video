@@ -1,12 +1,12 @@
-import { useState, useCallback, useRef } from "react";
+import { useCallback, useRef, useState } from "react";
 import {
-  FaInstagram,
-  FaDownload,
-  FaRegCopy,
-  FaCheckCircle,
-  FaTimesCircle,
-  FaSpinner,
   FaArrowLeft,
+  FaCheckCircle,
+  FaDownload,
+  FaInstagram,
+  FaRegCopy,
+  FaSpinner,
+  FaTimesCircle,
 } from "react-icons/fa";
 import "./InstagramDownloader.scss";
 
@@ -301,8 +301,8 @@ const InstagramDownloader = () => {
         )}
 
         <br />
-         {!previewUrl && (
-          <div className="fb-guide">
+        {!previewUrl && (
+          <div className="insta-guide">
             <b>Hướng dẫn:</b>{" "}
             {isMobile
               ? "Nhập link video instagram vào ô trên, sau đó bấm Tải về."
