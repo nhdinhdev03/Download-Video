@@ -1,31 +1,38 @@
-# Getting Started with Create React App
+# Nhdinh Downloader Pro - Frontend
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Ứng dụng tải video được xây dựng với **Vite + React** để có hiệu suất tối ưu và trải nghiệm phát triển nhanh chóng.
 
-## Available Scripts
+## 🚀 Tính năng nổi bật
 
-In the project directory, you can run:
+- ⚡ **Vite** - Build tool siêu nhanh với Hot Module Replacement (HMR)
+- 🔧 **React 18** với các hook mới nhất
+- 🎨 **Tailwind CSS** + **Ant Design** + **Material-UI** - UI framework mạnh mẽ
+- 📱 **PWA Support** - Ứng dụng web tiến bộ
+- 🧪 **Vitest** - Testing framework nhanh chóng
+- 📦 **Code Splitting** - Tự động chia nhỏ bundle
 
-### `npm start`
+## 📦 Cài đặt
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+```bash
+npm install
+# hoặc
+yarn install
+```
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## 🛠️ Available Scripts
 
-### `npm test`
+### `npm run dev`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Chạy ứng dụng ở chế độ development.\
+Mở [http://localhost:3000](http://localhost:3000) để xem trong trình duyệt.
+
+Trang sẽ tự động reload khi bạn thay đổi code.\
+Hot Module Replacement (HMR) siêu nhanh với Vite!
 
 ### `npm run build`
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Build ứng dụng cho production vào thư mục `dist`.\
+Vite tối ưu hóa build để có hiệu suất tốt nhất.
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
