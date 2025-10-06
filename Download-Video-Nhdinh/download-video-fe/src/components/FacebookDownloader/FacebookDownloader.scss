@@ -1,6 +1,10 @@
+@use "sass:map";
+@use "sass:color";
+
 // Modern Design Tokens (updated palette for 2025 trends, softer shadows)
 $colors: (
-  primary: #1877f2,  // Official Facebook blue
+  primary: #1877f2,
+  // Official Facebook blue
   primary-dark: #0e52b7,
   success: #00a884,
   success-light: #36cfac,
@@ -43,7 +47,8 @@ $spaces: (
   lg: 1.5rem,
   xl: 2rem,
   xxl: 3rem,
-  3xl: 4rem,  // Added for larger screens
+  3xl: 4rem,
+  // Added for larger screens
 );
 
 $fonts: (
@@ -52,7 +57,8 @@ $fonts: (
   lg: 1.125rem,
   xl: 1.25rem,
   2xl: 1.5rem,
-  3xl: 2rem,  // Added for titles on large screens
+  3xl: 2rem,
+  // Added for titles on large screens
 );
 
 $radii: (
@@ -61,31 +67,33 @@ $radii: (
   lg: 0.75rem,
   xl: 1rem,
   xxl: 1.5rem,
-  full: 9999px,  // For pill shapes
+  full: 9999px,
+  // For pill shapes
 );
 
 $shadows: (
   sm: 0 2px 4px rgba(0, 0, 0, 0.06),
   md: 0 4px 12px rgba(0, 0, 0, 0.08),
-  lg: 0 8px 24px rgba(0, 0, 0, 0.1),  // Softer, modern shadows
+  lg: 0 8px 24px rgba(0, 0, 0, 0.1),
+  // Softer, modern shadows
 );
 
 // Theme Variables
 :root {
-  --color-bg: #{map-get($colors, bg-light)};
-  --color-card: #{map-get($colors, card-light)};
-  --color-text: #{map-get($colors, text-light)};
-  --color-text-light: #{map-get($colors, text-light-secondary)};
-  --color-border: #{map-get($colors, border-light)};
-  --color-shadow: #{map-get($colors, shadow-light)};
-  --color-input-bg: #{map-get($colors, input-bg-light)};
-  --color-input-placeholder: #{map-get($colors, input-placeholder-light)};
-  --color-input-error-bg: #{map-get($colors, input-error-bg-light)};
-  --color-input-error-border: #{map-get($colors, input-error-border-light)};
-  --color-alert-success-bg: #{map-get($colors, alert-success-bg-light)};
-  --color-alert-success-text: #{map-get($colors, alert-success-text-light)};
-  --color-alert-error-bg: #{map-get($colors, alert-error-bg-light)};
-  --color-alert-error-text: #{map-get($colors, alert-error-text-light)};
+  --color-bg: #{map.get($colors, bg-light)};
+  --color-card: #{map.get($colors, card-light)};
+  --color-text: #{map.get($colors, text-light)};
+  --color-text-light: #{map.get($colors, text-light-secondary)};
+  --color-border: #{map.get($colors, border-light)};
+  --color-shadow: #{map.get($colors, shadow-light)};
+  --color-input-bg: #{map.get($colors, input-bg-light)};
+  --color-input-placeholder: #{map.get($colors, input-placeholder-light)};
+  --color-input-error-bg: #{map.get($colors, input-error-bg-light)};
+  --color-input-error-border: #{map.get($colors, input-error-border-light)};
+  --color-alert-success-bg: #{map.get($colors, alert-success-bg-light)};
+  --color-alert-success-text: #{map.get($colors, alert-success-text-light)};
+  --color-alert-error-bg: #{map.get($colors, alert-error-bg-light)};
+  --color-alert-error-text: #{map.get($colors, alert-error-text-light)};
 
   @each $name, $value in $colors {
     --color-#{$name}: #{$value};
@@ -107,20 +115,20 @@ $shadows: (
 }
 
 .dark-mode {
-  --color-bg: #{map-get($colors, bg-dark)};
-  --color-card: #{map-get($colors, card-dark)};
-  --color-text: #{map-get($colors, text-dark)};
-  --color-text-light: #{map-get($colors, text-dark-secondary)};
-  --color-border: #{map-get($colors, border-dark)};
-  --color-shadow: #{map-get($colors, shadow-dark)};
-  --color-input-bg: #{map-get($colors, input-bg-dark)};
-  --color-input-placeholder: #{map-get($colors, input-placeholder-dark)};
-  --color-input-error-bg: #{map-get($colors, input-error-bg-dark)};
-  --color-input-error-border: #{map-get($colors, input-error-border-dark)};
-  --color-alert-success-bg: #{map-get($colors, alert-success-bg-dark)};
-  --color-alert-success-text: #{map-get($colors, alert-success-text-dark)};
-  --color-alert-error-bg: #{map-get($colors, alert-error-bg-dark)};
-  --color-alert-error-text: #{map-get($colors, alert-error-text-dark)};
+  --color-bg: #{map.get($colors, bg-dark)};
+  --color-card: #{map.get($colors, card-dark)};
+  --color-text: #{map.get($colors, text-dark)};
+  --color-text-light: #{map.get($colors, text-dark-secondary)};
+  --color-border: #{map.get($colors, border-dark)};
+  --color-shadow: #{map.get($colors, shadow-dark)};
+  --color-input-bg: #{map.get($colors, input-bg-dark)};
+  --color-input-placeholder: #{map.get($colors, input-placeholder-dark)};
+  --color-input-error-bg: #{map.get($colors, input-error-bg-dark)};
+  --color-input-error-border: #{map.get($colors, input-error-border-dark)};
+  --color-alert-success-bg: #{map.get($colors, alert-success-bg-dark)};
+  --color-alert-success-text: #{map.get($colors, alert-success-text-dark)};
+  --color-alert-error-bg: #{map.get($colors, alert-error-bg-dark)};
+  --color-alert-error-text: #{map.get($colors, alert-error-text-dark)};
 }
 
 // Mixins (enhanced for modern effects)
@@ -135,7 +143,8 @@ $shadows: (
   font-size: var(--text-base);
   font-weight: 600;
   cursor: pointer;
-  transition: transform var(--transition-fast), box-shadow var(--transition-fast), background var(--transition-fast);
+  transition: transform var(--transition-fast),
+    box-shadow var(--transition-fast), background var(--transition-fast);
   box-shadow: var(--shadow-sm);
 
   &:not(:disabled):hover {
@@ -157,11 +166,13 @@ $shadows: (
 // Base Styles (modern font stack, smooth scrolling)
 body {
   background: var(--color-bg);
-  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    sans-serif;
   margin: 0;
   min-height: 100vh;
   color: var(--color-text);
-  transition: background-color var(--transition-normal), color var(--transition-normal);
+  transition: background-color var(--transition-normal),
+    color var(--transition-normal);
   scroll-behavior: smooth;
 }
 
@@ -187,7 +198,7 @@ body {
 }
 
 .fb-downloader-root {
-  max-width: 800px;  // Slightly wider for modern screens
+  max-width: 800px; // Slightly wider for modern screens
   width: 100%;
   margin: 0 auto;
   padding: var(--space-xxl) var(--space-xl);
@@ -198,11 +209,13 @@ body {
   border: 1px solid var(--color-border);
   transition: all var(--transition-normal);
 
-  @media (max-width: 1024px) {  // iPad landscape
+  @media (max-width: 1024px) {
+    // iPad landscape
     padding: var(--space-xl) var(--space-lg);
   }
 
-  @media (max-width: 768px) {  // iPad portrait/mobile
+  @media (max-width: 768px) {
+    // iPad portrait/mobile
     padding: var(--space-lg) var(--space-md);
     border-radius: var(--radius-lg);
   }
@@ -257,7 +270,7 @@ body {
   grid-template-columns: 1fr auto;
   gap: var(--space-sm);
   align-items: center;
-  background: transparent;  // Removed outdated bg
+  background: transparent; // Removed outdated bg
   margin-bottom: var(--space-xl);
 
   @media (max-width: 768px) {
@@ -272,7 +285,8 @@ body {
     background: var(--color-input-bg);
     outline: none;
     box-shadow: var(--shadow-sm);
-    transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+    transition: border-color var(--transition-fast),
+      box-shadow var(--transition-fast);
 
     &::placeholder {
       color: var(--color-input-placeholder);
@@ -306,11 +320,19 @@ body {
   }
 
   &.fb-btn-download {
-    background: linear-gradient(135deg, map-get($colors, success) 0%, map-get($colors, success-light) 100%);
+    background: linear-gradient(
+      135deg,
+      map.get($colors, success) 0%,
+      map.get($colors, success-light) 100%
+    );
     color: #fff;
 
     &:hover:not(:disabled) {
-      background: linear-gradient(135deg, darken(map-get($colors, success), 5%) 0%, darken(map-get($colors, success-light), 5%) 100%);
+      background: linear-gradient(
+        135deg,
+        color.scale(map.get($colors, success), $lightness: -15%) 0%,
+        color.scale(map.get($colors, success-light), $lightness: -10%) 100%
+      );
     }
   }
 
@@ -384,7 +406,7 @@ body {
 
       .fb-video-preview {
         width: 100%;
-        aspect-ratio: 16 / 9;  // Modern responsive video
+        aspect-ratio: 16 / 9; // Modern responsive video
         max-height: unset;
         border-radius: var(--radius-md);
         background: #000;
@@ -420,13 +442,17 @@ body {
   box-shadow: var(--shadow-sm);
 
   .fb-progress-bar-bg {
-    height: 8px;  // Thinner for modern look
+    height: 8px; // Thinner for modern look
     background: var(--color-border);
     border-radius: var(--radius-full);
     overflow: hidden;
 
     .fb-progress-bar {
-      background: linear-gradient(90deg, var(--color-primary) 0%, var(--color-success) 100%);
+      background: linear-gradient(
+        90deg,
+        var(--color-primary) 0%,
+        var(--color-success) 100%
+      );
       height: 100%;
       transition: width 0.4s ease-out;
     }
@@ -495,12 +521,19 @@ body {
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 // Enhanced Responsive Design
-@media (max-width: 1024px) {  // iPad landscape
+@media (max-width: 1024px) {
+  // iPad landscape
   .fb-downloader-root {
     max-width: 90vw;
   }
@@ -514,7 +547,8 @@ body {
   }
 }
 
-@media (max-width: 768px) {  // iPad portrait/mobile
+@media (max-width: 768px) {
+  // iPad portrait/mobile
   .main-center {
     padding: var(--space-lg);
   }
