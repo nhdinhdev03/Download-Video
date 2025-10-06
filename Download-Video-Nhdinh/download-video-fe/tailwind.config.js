@@ -1,5 +1,10 @@
-module.exports = {
-  darkMode: 'class', // Enabling dark mode with 'class' strategy
+/** @type {import('tailwindcss').Config} */
+export default {
+  content: [
+    "./index.html",
+    "./src/**/*.{js,ts,jsx,tsx}",
+  ],
+  darkMode: 'class',
   theme: {
     extend: {
       colors: {
@@ -29,10 +34,6 @@ module.exports = {
           'Arial',
           'Noto Sans',
           'sans-serif',
-          'Apple Color Emoji',
-          'Segoe UI Emoji',
-          'Segoe UI Symbol',
-          'Noto Color Emoji'
         ],
         sans: [
           'Inter',
@@ -45,12 +46,9 @@ module.exports = {
           'Arial',
           'Noto Sans',
           'sans-serif',
-          'Apple Color Emoji',
-          'Segoe UI Emoji',
-          'Segoe UI Symbol',
-          'Noto Color Emoji'
         ]
       }
     }
-  }
+  },
+  plugins: [],
 }
