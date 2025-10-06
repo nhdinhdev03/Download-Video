@@ -1,3 +1,6 @@
+@use "sass:map";
+@use "sass:color";
+
 // Design Tokens - Tối ưu hóa cho accessibility (contrast ratio > 4.5:1), modern aesthetics với soft shadows và subtle animations
 :root {
   // Colors - Palette hiện đại, dễ đọc, hỗ trợ dark mode seamless

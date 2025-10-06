@@ -1,3 +1,6 @@
+@use "sass:map";
+@use "sass:color";
+
 // Modern Design Tokens
 $colors: (
   primary: #dd2a7b,  // Instagram pink
@@ -74,20 +77,20 @@ $shadows: (
 
 // Theme Variables
 :root {
-  --color-bg: map-get($colors, bg-light);
-  --color-card: map-get($colors, card-light);
-  --color-text: map-get($colors, text-light);
-  --color-text-light: map-get($colors, text-light-secondary);
-  --color-border: map-get($colors, border-light);
-  --color-shadow: map-get($colors, shadow-light);
-  --color-input-bg: map-get($colors, input-bg-light);
-  --color-input-placeholder: map-get($colors, input-placeholder-light);
-  --color-input-error-bg: map-get($colors, input-error-bg-light);
-  --color-input-error-border: map-get($colors, input-error-border-light);
-  --color-alert-success-bg: map-get($colors, alert-success-bg-light);
-  --color-alert-success-text: map-get($colors, alert-success-text-light);
-  --color-alert-error-bg: map-get($colors, alert-error-bg-light);
-  --color-alert-error-text: map-get($colors, alert-error-text-light);
+  --color-bg: map.get($colors, bg-light);
+  --color-card: map.get($colors, card-light);
+  --color-text: map.get($colors, text-light);
+  --color-text-light: map.get($colors, text-light-secondary);
+  --color-border: map.get($colors, border-light);
+  --color-shadow: map.get($colors, shadow-light);
+  --color-input-bg: map.get($colors, input-bg-light);
+  --color-input-placeholder: map.get($colors, input-placeholder-light);
+  --color-input-error-bg: map.get($colors, input-error-bg-light);
+  --color-input-error-border: map.get($colors, input-error-border-light);
+  --color-alert-success-bg: map.get($colors, alert-success-bg-light);
+  --color-alert-success-text: map.get($colors, alert-success-text-light);
+  --color-alert-error-bg: map.get($colors, alert-error-bg-light);
+  --color-alert-error-text: map.get($colors, alert-error-text-light);
 
   @each $name, $value in $colors {
     --color-#{$name}: #{$value};
@@ -109,20 +112,20 @@ $shadows: (
 }
 
 .dark-mode {
-  --color-bg: map-get($colors, bg-dark);
-  --color-card: map-get($colors, card-dark);
-  --color-text: map-get($colors, text-dark);
-  --color-text-light: map-get($colors, text-dark-secondary);
-  --color-border: map-get($colors, border-dark);
-  --color-shadow: map-get($colors, shadow-dark);
-  --color-input-bg: map-get($colors, input-bg-dark);
-  --color-input-placeholder: map-get($colors, input-placeholder-dark);
-  --color-input-error-bg: map-get($colors, input-error-bg-dark);
-  --color-input-error-border: map-get($colors, input-error-border-dark);
-  --color-alert-success-bg: map-get($colors, alert-success-bg-dark);
-  --color-alert-success-text: map-get($colors, alert-success-text-dark);
-  --color-alert-error-bg: map-get($colors, alert-error-bg-dark);
-  --color-alert-error-text: map-get($colors, alert-error-text-dark);
+  --color-bg: map.get($colors, bg-dark);
+  --color-card: map.get($colors, card-dark);
+  --color-text: map.get($colors, text-dark);
+  --color-text-light: map.get($colors, text-dark-secondary);
+  --color-border: map.get($colors, border-dark);
+  --color-shadow: map.get($colors, shadow-dark);
+  --color-input-bg: map.get($colors, input-bg-dark);
+  --color-input-placeholder: map.get($colors, input-placeholder-dark);
+  --color-input-error-bg: map.get($colors, input-error-bg-dark);
+  --color-input-error-border: map.get($colors, input-error-border-dark);
+  --color-alert-success-bg: map.get($colors, alert-success-bg-dark);
+  --color-alert-success-text: map.get($colors, alert-success-text-dark);
+  --color-alert-error-bg: map.get($colors, alert-error-bg-dark);
+  --color-alert-error-text: map.get($colors, alert-error-text-dark);
 }
 
 // Mixins
@@ -305,7 +308,7 @@ body {
   }
 
   &.insta-btn-download {
-    background: linear-gradient(135deg, map-get($colors, success) 0%, map-get($colors, success-light) 100%);
+    background: linear-gradient(135deg, map.get($colors, success) 0%, map.get($colors, success-light) 100%);
     color: #fff;
   }
 
