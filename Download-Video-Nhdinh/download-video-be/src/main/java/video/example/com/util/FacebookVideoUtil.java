@@ -19,14 +19,17 @@ public class FacebookVideoUtil {
         return sanitized.isEmpty() ? UUID.randomUUID().toString() : sanitized;
     }
 
-    public static String downloadVideoUsingYtDlp(String fbUrl, String providedTitle, Consumer<String> progressCallback) throws IOException {
+    public static String downloadVideoUsingYtDlp(String fbUrl, String providedTitle, Consumer<String> progressCallback)
+            throws IOException {
         // Nếu không có tiêu đề từ client, thử lấy từ yt-dlp
         String videoTitle = providedTitle;
+        String ytDlpPath = "C:/Users/HOANG DINH/Desktop/Download-Video/.venv/Scripts/yt-dlp.exe";
         if (videoTitle == null || videoTitle.trim().isEmpty()) {
-            ProcessBuilder titlePb = new ProcessBuilder("yt-dlp", "--get-title", fbUrl);
+            ProcessBuilder titlePb = new ProcessBuilder(ytDlpPath, "--get-title", fbUrl);
             titlePb.redirectErrorStream(true);
             Process titleProcess = titlePb.start();
-            try (BufferedReader reader = new BufferedReader(new InputStreamReader(titleProcess.getInputStream(), "UTF-8"))) {
+            try (BufferedReader reader = new BufferedReader(
+                    new InputStreamReader(titleProcess.getInputStream(), "UTF-8"))) {
                 videoTitle = reader.readLine();
             } catch (IOException e) {
                 System.err.println("Failed to read video title: " + e.getMessage());
@@ -46,8 +49,7 @@ public class FacebookVideoUtil {
         String outputPath = System.getProperty("java.io.tmpdir") + File.separator + fileName;
 
         ProcessBuilder pb = new ProcessBuilder(
-                "yt-dlp", "--newline", "-f", "best", "-o", outputPath, fbUrl
-        );
+                ytDlpPath, "--newline", "-f", "best", "-o", outputPath, fbUrl);
         pb.redirectErrorStream(true);
 
         Process process = pb.start();

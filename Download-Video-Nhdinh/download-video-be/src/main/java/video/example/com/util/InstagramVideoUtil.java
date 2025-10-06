@@ -9,12 +9,13 @@ import java.util.function.Consumer;
 
 public class InstagramVideoUtil {
 
-    public static String downloadVideoUsingYtDlp(String instaUrl, Consumer<String> progressCallback) throws IOException {
+    public static String downloadVideoUsingYtDlp(String instaUrl, Consumer<String> progressCallback)
+            throws IOException {
         String outputPath = System.getProperty("java.io.tmpdir") + File.separator + UUID.randomUUID() + ".mp4";
+        String ytDlpPath = "C:/Users/HOANG DINH/Desktop/Download-Video/.venv/Scripts/yt-dlp.exe";
 
         ProcessBuilder pb = new ProcessBuilder(
-                "yt-dlp", "--newline", "-f", "best", "-o", outputPath, instaUrl
-        );
+                ytDlpPath, "--newline", "-f", "best", "-o", outputPath, instaUrl);
         pb.redirectErrorStream(true);
 
         Process process = pb.start();

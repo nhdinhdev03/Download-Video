@@ -26,44 +26,44 @@ import video.example.com.util.FacebookVideoUtil;
 @RequestMapping("/api")
 @CrossOrigin(origins = "*")
 public class FacebookVideoController {
-@GetMapping(value = "/download/stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-public SseEmitter streamDownload(@RequestParam String url, @RequestParam(required = false) String title) {
-    SseEmitter emitter = new SseEmitter(600_000L); // Tăng lên 10 phút
+    @GetMapping(value = "/download/stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public SseEmitter streamDownload(@RequestParam String url, @RequestParam(required = false) String title) {
+        SseEmitter emitter = new SseEmitter(600_000L); // Tăng lên 10 phút
 
-    new Thread(() -> {
-        try {
-            String filename = FacebookVideoUtil.downloadVideoUsingYtDlp(url, title, progress -> {
-                try {
-                    emitter.send(SseEmitter.event().data(progress));
-                } catch (IOException e) {
-                    System.err.println("Client disconnected: " + e.getMessage());
-                }
-            });
-
-            emitter.send(SseEmitter.event().data("DONE_" + filename));
-        } catch (Exception e) {
+        new Thread(() -> {
             try {
-                emitter.send(SseEmitter.event().data("ERROR_Retry_" + e.getMessage()));
-                // Thêm retry logic nếu cần
-                Thread.sleep(2000); // Chờ 2 giây trước khi retry
                 String filename = FacebookVideoUtil.downloadVideoUsingYtDlp(url, title, progress -> {
                     try {
                         emitter.send(SseEmitter.event().data(progress));
-                    } catch (IOException ex) {
-                        System.err.println("Client disconnected: " + ex.getMessage());
+                    } catch (IOException e) {
+                        System.err.println("Client disconnected: " + e.getMessage());
                     }
                 });
-                emitter.send(SseEmitter.event().data("DONE_" + filename));
-            } catch (Exception ex) {
-                // emitter.send(SseEmitter.event().data("ERROR_" + ex.getMessage()));
-            }
-        } finally {
-            emitter.complete();
-        }
-    }).start();
 
-    return emitter;
-}
+                emitter.send(SseEmitter.event().data("DONE_" + filename));
+            } catch (Exception e) {
+                try {
+                    emitter.send(SseEmitter.event().data("ERROR_Retry_" + e.getMessage()));
+                    // Thêm retry logic nếu cần
+                    Thread.sleep(2000); // Chờ 2 giây trước khi retry
+                    String filename = FacebookVideoUtil.downloadVideoUsingYtDlp(url, title, progress -> {
+                        try {
+                            emitter.send(SseEmitter.event().data(progress));
+                        } catch (IOException ex) {
+                            System.err.println("Client disconnected: " + ex.getMessage());
+                        }
+                    });
+                    emitter.send(SseEmitter.event().data("DONE_" + filename));
+                } catch (Exception ex) {
+                    // emitter.send(SseEmitter.event().data("ERROR_" + ex.getMessage()));
+                }
+            } finally {
+                emitter.complete();
+            }
+        }).start();
+
+        return emitter;
+    }
 
     @GetMapping("/download")
     public ResponseEntity<InputStreamResource> downloadVideo(@RequestParam String filename) throws IOException {
@@ -81,13 +81,16 @@ public SseEmitter streamDownload(@RequestParam String url, @RequestParam(require
     }
 
     @PostMapping("/preview")
-    public ResponseEntity<Map<String, String>> previewVideo(@RequestBody Map<String, String> payload) throws IOException {
+    public ResponseEntity<Map<String, String>> previewVideo(@RequestBody Map<String, String> payload)
+            throws IOException {
         String fbUrl = payload.get("url");
         if (fbUrl == null || !fbUrl.matches("https?://(www\\.)?(facebook\\.com|fb\\.watch|fb\\.com)/.*")) {
             return ResponseEntity.badRequest().body(Map.of("error", "URL không hợp lệ."));
         }
 
-        ProcessBuilder pb = new ProcessBuilder("yt-dlp", "-f", "b", "-g", "--get-title", fbUrl);
+        // Sử dụng đường dẫn đầy đủ đến yt-dlp
+        String ytDlpPath = "C:/Users/HOANG DINH/Desktop/Download-Video/.venv/Scripts/yt-dlp.exe";
+        ProcessBuilder pb = new ProcessBuilder(ytDlpPath, "-f", "b", "-g", "--get-title", fbUrl);
         pb.redirectErrorStream(true);
         Process process = pb.start();
 
@@ -96,7 +99,7 @@ public SseEmitter streamDownload(@RequestParam String url, @RequestParam(require
 
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream(), "UTF-8"))) {
             videoTitle = reader.readLine(); // Dòng đầu là title
-            directUrl = reader.readLine();  // Dòng hai là link mp4
+            directUrl = reader.readLine(); // Dòng hai là link mp4
         }
 
         try {
@@ -106,8 +109,7 @@ public SseEmitter streamDownload(@RequestParam String url, @RequestParam(require
             }
             return ResponseEntity.ok(Map.of(
                     "videoUrl", directUrl,
-                    "title", videoTitle != null ? videoTitle : ""
-            ));
+                    "title", videoTitle != null ? videoTitle : ""));
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             return ResponseEntity.status(500).body(Map.of("error", "Lỗi hệ thống."));
