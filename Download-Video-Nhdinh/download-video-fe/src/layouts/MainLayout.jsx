@@ -1,11 +1,13 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   FaAt,
+  FaCheckCircle,
   FaFacebook,
   FaInstagram,
   FaMoon,
   FaSun,
   FaTiktok,
+  FaTimesCircle,
   FaTwitter,
   FaYoutube,
 } from "react-icons/fa";
@@ -16,6 +18,7 @@ import "./MainLayout.scss";
 function MainLayout({ children }) {
   const [toast, setToast] = useState("");
   const [toastProgress, setToastProgress] = useState(100);
+  const [toastType, setToastType] = useState("info");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(() => {
     try {
@@ -84,6 +87,7 @@ function MainLayout({ children }) {
 
   const handleComingSoon = useCallback((name) => {
     setToast(`"${name}" đang được phát triển. Vui lòng quay lại sau!`);
+    setToastType("warning");
     setToastProgress(100);
   }, []);
 
@@ -121,12 +125,13 @@ function MainLayout({ children }) {
     }
   }, [isMobileMenuOpen]);
 
-  // Hiệu ứng toast notification với progress bar
+  // Hiệu ứng toast notification với progress bar mượt hơn
   useEffect(() => {
     if (toast) {
-      const t = setTimeout(() => setToast(""), 3000);
+      setToastProgress(100);
+
       const progressInterval = setInterval(() => {
-        setToastProgress((prev) => Math.max(prev - 100 / 30, 0));
+        setToastProgress((prev) => Math.max(prev - 100 / 32, 0));
       }, 100);
       return () => {
         clearTimeout(t);
@@ -305,12 +310,16 @@ function MainLayout({ children }) {
       </footer>
       {toast && (
         <div
-          className="toast-notification"
+          className={`toast-notification toast-${toastType}`}
           role="alert"
           aria-live="polite"
           style={{ "--progress": `${toastProgress}%` }}
         >
-          {toast}
+          <span className="toast-icon">
+            {toastType === "info" && <FaCheckCircle color="#38b000" />}
+            {toastType === "warning" && <FaTimesCircle color="#ffaa00" />}
+          </span>
+          <span className="toast-message">{toast}</span>
           <div className="toast-progress" />
         </div>
       )}
