@@ -1,14 +1,14 @@
-import { useState, useCallback, useEffect, useRef } from "react";
-import { useLocation } from "react-router-dom";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
-  FaFacebook,
-  FaDownload,
-  FaRegCopy,
-  FaCheckCircle,
-  FaTimesCircle,
-  FaSpinner,
   FaArrowLeft,
+  FaCheckCircle,
+  FaDownload,
+  FaFacebook,
+  FaRegCopy,
+  FaSpinner,
+  FaTimesCircle,
 } from "react-icons/fa";
+import { useLocation } from "react-router-dom";
 import "./FacebookDownloader.scss";
 
 const API_BASE =
@@ -27,8 +27,9 @@ const FacebookDownloader = () => {
   const [videoTitle, setVideoTitle] = useState("");
   const sseRef = useRef(null);
   const location = useLocation();
-  const inputRef = useRef(null); // Thêm ref cho input
+  const inputRef = useRef(null);
   const isMobile = /iPhone|iPad|iPod|Android|Mobile/i.test(navigator.userAgent);
+  const [showAlert, setShowAlert] = useState(false);
 
   const isValidFacebookUrl = useCallback((input) => {
     try {
@@ -47,11 +48,13 @@ const FacebookDownloader = () => {
     async (inputUrl = url) => {
       if (!inputUrl || !isValidFacebookUrl(inputUrl)) {
         setError("Vui lòng nhập đúng link video Facebook!");
+        setShowAlert(true);
         return;
       }
       setLoading((prev) => ({ ...prev, preview: true }));
       setError("");
       setSuccess("");
+      setShowAlert(false);
       setPreviewUrl("");
       setVideoTitle("");
       try {
@@ -74,6 +77,7 @@ const FacebookDownloader = () => {
         }
       } catch (err) {
         setError("Lỗi: " + (err.message || "Không lấy được video"));
+        setShowAlert(true);
       } finally {
         setLoading((prev) => ({ ...prev, preview: false }));
       }
@@ -84,15 +88,17 @@ const FacebookDownloader = () => {
   const handleDownload = useCallback(() => {
     if (!isValidFacebookUrl(url)) {
       setError("Vui lòng nhập đúng link video Facebook!");
+      setShowAlert(true);
       return;
     }
     setLoading((prev) => ({ ...prev, download: true }));
     setProgress(0);
     setError("");
     setSuccess("");
+    setShowAlert(false);
 
     const sanitizedTitle = videoTitle
-      .replaceAll('[<>:"/\\\\|?*]', "")
+      .replaceAll('[<>:"/\\|?*]', "")
       .replaceAll("\\s+", "_");
     const eventSource = new EventSource(
       `${API_BASE}/download/stream?url=${encodeURIComponent(
@@ -109,17 +115,23 @@ const FacebookDownloader = () => {
         const fileName = msg.replace("DONE_", "");
         setProgress(100);
         setSuccess("Video đã sẵn sàng để tải xuống...");
-        const tempLink = document.createElement("a");
-        tempLink.href = `${API_BASE}/download?filename=${encodeURIComponent(
-          fileName
-        )}`;
-        tempLink.download = sanitizedTitle ? `${sanitizedTitle}.mp4` : fileName;
-        tempLink.click();
-        setSuccess("Tải video thành công!");
+        setShowAlert(true);
+        setTimeout(() => {
+          const tempLink = document.createElement("a");
+          tempLink.href = `${API_BASE}/download?filename=${encodeURIComponent(
+            fileName
+          )}`;
+          tempLink.download = sanitizedTitle
+            ? `${sanitizedTitle}.mp4`
+            : fileName;
+          tempLink.click();
+          setSuccess("Tải video thành công!");
+        }, 600);
         setLoading((prev) => ({ ...prev, download: false }));
         eventSource.close();
       } else if (msg.startsWith("ERROR_")) {
         setError(msg.replace("ERROR_", ""));
+        setShowAlert(true);
         setLoading((prev) => ({ ...prev, download: false }));
         eventSource.close();
       }
@@ -128,6 +140,7 @@ const FacebookDownloader = () => {
     eventSource.onerror = () => {
       if (progress < 100) {
         setError("Mất kết nối máy chủ, đang thử lại...");
+        setShowAlert(true);
         eventSource.close();
         setTimeout(handleDownload, 2000);
       }
@@ -138,9 +151,14 @@ const FacebookDownloader = () => {
     if (navigator.clipboard && previewUrl) {
       navigator.clipboard.writeText(previewUrl);
       setSuccess("Link đã được sao chép!");
-      setTimeout(() => setSuccess(""), 1500);
+      setShowAlert(true);
+      setTimeout(() => {
+        setSuccess("");
+        setShowAlert(false);
+      }, 1200);
     } else {
       setError("Không thể sao chép link!");
+      setShowAlert(true);
     }
   }, [previewUrl]);
 
@@ -151,6 +169,8 @@ const FacebookDownloader = () => {
     setError("");
     setSuccess("");
     setProgress(0);
+    setShowAlert(false);
+    if (inputRef.current) inputRef.current.focus();
   };
 
   useEffect(() => {
@@ -171,6 +191,21 @@ const FacebookDownloader = () => {
       }
     }
   }, [location, handlePreview, handleDownload]);
+
+  // Smoothly fade alert in/out
+  useEffect(() => {
+    if (showAlert && (error || success)) {
+      const timer = setTimeout(
+        () => {
+          setShowAlert(false);
+          setError("");
+          setSuccess("");
+        },
+        success ? 1800 : 3000
+      );
+      return () => clearTimeout(timer);
+    }
+  }, [showAlert, error, success]);
 
   return (
     <div className="main-center">
@@ -202,7 +237,8 @@ const FacebookDownloader = () => {
                 spellCheck={false}
                 autoFocus
                 autoComplete="off"
-                ref={inputRef} // Gắn ref vào input
+                ref={inputRef}
+                aria-label="Facebook video link"
               />
               <button
                 className="fb-btn fb-btn-preview"
@@ -210,9 +246,10 @@ const FacebookDownloader = () => {
                   if (isMobile) {
                     if (!url || !isValidFacebookUrl(url)) {
                       setError("Vui lòng nhập đúng link video Facebook!");
+                      setShowAlert(true);
                       return;
                     }
-                    handleDownload(); // Thực hiện tải về trực tiếp trên mobile/iPad
+                    handleDownload();
                   } else {
                     try {
                       const clipboardText =
@@ -222,10 +259,12 @@ const FacebookDownloader = () => {
                       handlePreview(cleanedUrl);
                     } catch {
                       setError("Không thể đọc clipboard!");
+                      setShowAlert(true);
                     }
                   }
                 }}
                 disabled={loading.preview || (isMobile && loading.download)}
+                aria-busy={loading.preview || loading.download}
               >
                 {isMobile ? (
                   loading.download ? (
@@ -258,8 +297,13 @@ const FacebookDownloader = () => {
                 src={previewUrl}
                 controls
                 className="fb-video-preview"
-                onError={() => setError("Không thể tải video")}
+                onError={() => {
+                  setError("Không thể tải video");
+                  setShowAlert(true);
+                }}
                 preload="metadata"
+                tabIndex={0}
+                aria-label="Facebook video preview"
               />
             </div>
             <div className="fb-preview-col fb-preview-actions">
@@ -267,6 +311,7 @@ const FacebookDownloader = () => {
                 className="fb-btn fb-btn-download"
                 onClick={handleDownload}
                 disabled={loading.download}
+                aria-busy={loading.download}
               >
                 {loading.download ? (
                   <FaSpinner className="fb-spin" />
@@ -279,11 +324,16 @@ const FacebookDownloader = () => {
                 className="fb-btn fb-btn-copy"
                 onClick={handleCopy}
                 disabled={!previewUrl}
+                aria-label="Sao chép link video"
               >
                 <FaRegCopy />
                 Sao chép link
               </button>
-              <button className="fb-btn fb-btn-back" onClick={handleBack}>
+              <button
+                className="fb-btn fb-btn-back"
+                onClick={handleBack}
+                aria-label="Video khác"
+              >
                 <FaArrowLeft /> Video khác
               </button>
             </div>
@@ -294,17 +344,27 @@ const FacebookDownloader = () => {
             <div className="fb-progress-bar-bg">
               <div
                 className="fb-progress-bar"
-                style={{ width: `${progress}%` }}
+                style={{
+                  width: `${progress}%`,
+                  transition: "width 0.4s cubic-bezier(.4,0,.2,1)",
+                }}
               />
             </div>
             <div className="fb-progress-label">{progress}%</div>
           </div>
         )}
-        {(error || success) && (
+        {showAlert && (error || success) && (
           <div
             className={`fb-alert ${
               success ? "fb-alert-success" : "fb-alert-error"
             }`}
+            style={{
+              opacity: showAlert ? 1 : 0,
+              transition: "opacity 0.4s",
+              pointerEvents: showAlert ? "auto" : "none",
+            }}
+            role="alert"
+            aria-live="assertive"
           >
             {success ? <FaCheckCircle /> : <FaTimesCircle />}
             {success || error}
@@ -326,7 +386,6 @@ const FacebookDownloader = () => {
       </div>
     </div>
   );
-
 };
 
 export default FacebookDownloader;
